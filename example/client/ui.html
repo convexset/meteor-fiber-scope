@@ -1,0 +1,14 @@
+<head>
+	<title>Fiber Scope Demo</title>
+</head>
+<body>
+	{{>FiberScopeDemo}}	
+</body>
+
+<template name="FiberScopeDemo">
+	<h1>Locker Demo - {{id}}</h1>
+	Look in the console to see stuff.
+	<button id="invoke-publish">Invoke Publication Function</button>
+	<button id="call-method">Invoke Method</button>
+	<button id="call-method-unblocked">Invoke Method (Unblocked)</button>
+</template>

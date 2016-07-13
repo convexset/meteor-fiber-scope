@@ -1,0 +1,4 @@
+.DS_Store
+*.sh
+
+node_modules
