@@ -7,9 +7,10 @@ A package for providing ultra-simple dynamic scoping capabilities in Meteor meth
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Install](#install)
 - [Usage](#usage)
-  - [`FiberScope.currentScope`](#fiberscopecurrentscope)
+  - [`FiberScope.current`](#fiberscopecurrent)
   - [`FiberScope.context`](#fiberscopecontext)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -26,11 +27,11 @@ This is available as [`convexset:fiber-scope`](https://atmospherejs.com/convexse
 import { FiberScope } from 'meteor/convexset:fiber-scope';
 ```
 
-### `FiberScope.currentScope`
+### `FiberScope.current`
 
 The main tool of this package is a simple way to do dynamic scoping within a Meteor Method or publication function call using
 ```javascript
-FiberScope.currentScope
+FiberScope.current
 ```
 Each method method invocation will have easy access to its own private scope no matter how deep one wanders into the call stack and whether or not the method "yields".
 
@@ -39,8 +40,8 @@ For example:
 Meteor.methods({
   "my-method": function(id) {
     this.unblock();  // enables yielding between calls from the same connection
-    FiberScope.currentScope.x = Math.random();
-    FiberScope.currentScope.y = Math.random();
+    FiberScope.current.x = Math.random();
+    FiberScope.current.y = Math.random();
     display(id);
     Meteor._sleepForMs(1000);  // causes a yield (other code can run during this pause)
     display(id);
@@ -48,7 +49,7 @@ Meteor.methods({
 });
 
 function display(id) {
-  console.log(`[${id}] x=${FiberScope.currentScope.x}, y=${FiberScope.currentScope.y}`)
+  console.log(`[${id}] x=${FiberScope.current.x}, y=${FiberScope.current.y}`)
 }
 ```
 Doing `Meteor.call("my-method", 'one'); Meteor.call("my-method", 'two');` will predictably generate something like:
@@ -70,7 +71,7 @@ For example:
  - `FiberScope.context.userId` returns the id of the currently logged in user
  - `FiberScope.context.connection.id` returns the id of the current connection
 
-Note that for publication functions, similar functionality is not as readily available. One might consider (as in the provided example app) copying it as a property of `FiberScope.currentScope` and using at later.
+Note that for publication functions, similar functionality is not as readily available. One might consider (as in the provided example app) copying it as a property of `FiberScope.current` and using at later.
 
 Here is an example of a Meteor Method context (the `this` when a Meteor method is called):
 ```javascript

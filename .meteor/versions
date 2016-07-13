@@ -14,7 +14,7 @@ caching-compiler@1.0.6
 caching-html-compiler@1.0.6
 callback-hook@1.0.9
 check@1.2.3
-convexset:fiber-scope@0.1.0
+convexset:fiber-scope@0.1.0_1
 ddp@1.2.5
 ddp-client@1.2.9
 ddp-common@1.2.6
@@ -72,7 +72,6 @@ standard-minifier-css@1.0.8
 standard-minifier-js@1.0.8
 templating@1.1.13
 templating-tools@1.0.4
-tmeasday:check-npm-versions@0.3.1
 tracker@1.0.14
 ui@1.0.11
 underscore@1.0.9

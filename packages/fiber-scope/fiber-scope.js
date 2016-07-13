@@ -20,7 +20,7 @@ Object.defineProperties(FiberScope, {
 			return DDP._CurrentInvocation.getOrNullIfOutsideFiber();
 		}
 	},
-	currentScope: {
+	current: {
 		configurable: false,
 		enumerable: true,
 		get: function getFiberScope() {
