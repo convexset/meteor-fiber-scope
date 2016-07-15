@@ -1,6 +1,6 @@
 # FiberScope
 
-A package for providing ultra-simple dynamic scoping capabilities in **synchronous** Meteor methods and publication functions.
+A package for providing ultra-simple dynamic scoping capabilities in Meteor methods and publication functions.
 
 ## Table of Contents
 
@@ -8,19 +8,22 @@ A package for providing ultra-simple dynamic scoping capabilities in **synchrono
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Install](#install)
 - [Overview of Functionality](#overview-of-functionality)
+- [Install](#install)
 - [Usage](#usage)
   - [`FiberScope.current`](#fiberscopecurrent)
   - [`FiberScope.context`](#fiberscopecontext)
+  - [Async Code](#async-code)
+    - [Timers](#timers)
+    - [Promises](#promises)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Overview of Functionality
 
-If one's Meteor method actually generates call stack movement (calling multiple levels of functions, recursion, etc.) and one would like to preserve across function boundaries without passing data as arguments. One simply treats `FiberScope.current` as a "local-everywhere" object where anything within the same Meteor method invocation has access to it.
+If one's Meteor method actually generates call stack movement (calling multiple levels of functions, recursion, etc.) and one would like to preserve across function boundaries without passing data as arguments. One simply treats `FiberScope.current` as a "local-everywhere" object where anything "within the same Meteor method invocation" has access to it.
 
-**Note that the tools here do not work async. (Yet.)**
+**As noted above, `FiberScope.current` and `FiberScope.context` here do not work async automatically.** More details [here](#async-code).
 
 ## Install
 
@@ -120,3 +123,22 @@ But then again, maybe one need only care about this subset:
     }
 }
 ```
+
+### Async Code
+
+#### Timers
+
+As noted above, `FiberScope.current` and `FiberScope.context` here do not work async automatically. (Because... don't hack core.) In your code, replace `Meteor.setTimeout` (and `Meteor.setInterval` and `Meteor.defer` methods) with `FiberScope.setTimeout` (and `FiberScope.setInterval` and `FiberScope.defer` methods).
+
+The timers returned by `FiberScope.setTimeout` and `FiberScope.setInterval` can be cleared using `FiberScope.clearTimeout` and `FiberScope.clearInterval` (or `Meteor.clearTimeout` and `Meteor.clearInterval`).
+
+To **consciously** replace `Meteor.setTimeout`, `Meteor.setInterval` and `Meteor.defer` with their `FiberScope` counterparts. Simply call:
+```javascript
+FiberScope._replaceMeteorTimerFunctions();
+```
+Then you can carry on using `Meteor.setTimeout`, `Meteor.setInterval` and `Meteor.defer` in your code with the benefits of `FiberScope` in those async functions.
+
+#### Promises
+
+As long as the [`promise`](https://atmospherejs.com/meteor/promise) package, which makes `Promise`'s Fiber-aware, is installed (usually it is available by default), `FiberScope.current` and `FiberScope.context` will work fine.
+

@@ -20,11 +20,23 @@ Template.FiberScopeDemo.helpers({
 Template.FiberScopeDemo.events({
 	'click button#call-method': function() {
 		var id = `${Template.instance().id}-${Random.id(4)}`;
+		console.log("some-method", id);
 		Meteor.call("some-method", id);
 	},
 	'click button#call-method-unblocked': function() {
 		var id = `${Template.instance().id}-${Random.id(4)}`;
+		console.log("some-method-unblocked", id);
 		Meteor.call("some-method-unblocked", id);
+	},
+	'click button#call-method-set-timeout-defer-promise': function() {
+		var id = `${Template.instance().id}-${Random.id(4)}`;
+		console.log("some-method-set-timeout-defer-promise", id);
+		Meteor.call("some-method-set-timeout-defer-promise", id);
+	},
+	'click button#call-method-set-interval': function() {
+		var id = `${Template.instance().id}-${Random.id(4)}`;
+		console.log("some-method-set-interval", id);
+		Meteor.call("some-method-set-interval", id);
 	},
 	'click button#invoke-publish': function() {
 		var id = `${Template.instance().id}-${Random.id(4)}`;
