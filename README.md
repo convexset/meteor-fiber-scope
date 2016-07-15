@@ -52,9 +52,9 @@ Meteor.methods({
     this.unblock();  // enables yielding between calls from the same connection
     FiberScope.current.x = Math.random();
     FiberScope.current.y = Math.random();
-    display(id);
+    display(id + "|first");
     Meteor._sleepForMs(1000);  // causes a yield (other code can run during this pause)
-    display(id);
+    display(id + "|last");
   }
 });
 
@@ -62,14 +62,21 @@ function display(id) {
   console.log(`[${id}] x=${FiberScope.current.x}, y=${FiberScope.current.y}`)
 }
 ```
-Doing `Meteor.call("my-method", 'one'); Meteor.call("my-method", 'two');` will predictably generate something like:
+Invoking the above (unblocked) method twice in rapid succession like so
+```javascript
+Meteor.call("my-method", 'one');
+Meteor.call("my-method", 'two');
 ```
-one x=0.234, y=0.423
-two x=0.345, y=0.594
-one x=0.234, y=0.423
-two x=0.345, y=0.594
+would predictably generate something like:
+```
+[one|first] x=0.23411111, y=0.42311111
+[two|first] x=0.34522222, y=0.59422222
+[one|last] x=0.23411111, y=0.42311111
+[two|last] x=0.34522222, y=0.59422222
 ```
 on the server console.
+
+And the same works for code specified in timers or promises... or when one is doing recursion. Good old `FiberScope.current` would be there each step of the way, like a band of paid Sherpas following some rich guy who wants to climb Everest.
 
 ### `FiberScope.context`
 
