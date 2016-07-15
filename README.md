@@ -1,6 +1,6 @@
 # FiberScope
 
-A package for providing ultra-simple dynamic scoping capabilities in Meteor methods and publication functions.
+A package for providing ultra-simple dynamic scoping capabilities in **synchronous** Meteor methods and publication functions.
 
 ## Table of Contents
 
@@ -9,11 +9,18 @@ A package for providing ultra-simple dynamic scoping capabilities in Meteor meth
 
 
 - [Install](#install)
+- [Overview of Functionality](#overview-of-functionality)
 - [Usage](#usage)
   - [`FiberScope.current`](#fiberscopecurrent)
   - [`FiberScope.context`](#fiberscopecontext)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Overview of Functionality
+
+If one's Meteor method actually generates call stack movement (calling multiple levels of functions, recursion, etc.) and one would like to preserve across function boundaries without passing data as arguments. One simply treats `FiberScope.current` as a "local-everywhere" object where anything within the same Meteor method invocation has access to it.
+
+**Note that the tools here do not work async. (Yet.)**
 
 ## Install
 
