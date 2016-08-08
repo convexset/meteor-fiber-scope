@@ -47,7 +47,7 @@ Object.defineProperties(FiberScope, {
 		value: function FiberScope_setTimeout(f, timeout) {
 			fiberScopeEnvVar_Scope.withValue(FiberScope.current, function() {
 				return fiberScopeEnvVar_Context.withValue(FiberScope.context, function() {
-					MeteorTimerFunctions.setTimeout.call(Meteor, f, timeout);
+					return MeteorTimerFunctions.setTimeout.call(Meteor, f, timeout);
 				});
 			});
 		}
