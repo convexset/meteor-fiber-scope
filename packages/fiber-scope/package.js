@@ -1,7 +1,7 @@
 Package.describe({
 	// [validatis:stack]
 	name: 'convexset:fiber-scope',
-	version: '0.1.1_1',
+	version: '0.1.1_2',
 	summary: 'Super easy fibers-based dynamic scoping in Meteor Methods and Publications',
 	git: 'https://github.com/convexset/meteor-fiber-scope',
 	documentation: '../../README.md'

@@ -45,7 +45,7 @@ Object.defineProperties(FiberScope, {
 		enumerable: false,
 		writable: false,
 		value: function FiberScope_setTimeout(f, timeout) {
-			fiberScopeEnvVar_Scope.withValue(FiberScope.current, function() {
+			return fiberScopeEnvVar_Scope.withValue(FiberScope.current, function() {
 				return fiberScopeEnvVar_Context.withValue(FiberScope.context, function() {
 					return MeteorTimerFunctions.setTimeout.call(Meteor, f, timeout);
 				});
