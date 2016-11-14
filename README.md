@@ -4,20 +4,19 @@ A package for providing ultra-simple dynamic scoping capabilities in Meteor meth
 
 ## Table of Contents
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
+<!-- MarkdownTOC -->
 
 - [Overview of Functionality](#overview-of-functionality)
 - [Install](#install)
 - [Usage](#usage)
-  - [`FiberScope.current`](#fiberscopecurrent)
-  - [`FiberScope.context`](#fiberscopecontext)
-  - [Async Code](#async-code)
-    - [Timers](#timers)
-    - [Promises](#promises)
+    - [`FiberScope.current`](#fiberscopecurrent)
+    - [`FiberScope.context`](#fiberscopecontext)
+    - [Async Code](#async-code)
+        - [Timers](#timers)
+        - [Promises](#promises)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- /MarkdownTOC -->
+
 
 ## Overview of Functionality
 
@@ -81,9 +80,11 @@ And the same works for code specified in timers or promises... or when one is do
 ### `FiberScope.context`
 
 In Meteor methods, the context (`this`) provides a lot of information, but it becomes inconvenient to access when calling functions in a "nested manner". With `FiberScope` that inconvenience goes away as one can access and manipulate the Meteor method context directly as:
+
 ```javascript
 FiberScope.context
 ```
+
 For example:
  - `FiberScope.context.userId` returns the id of the currently logged in user
  - `FiberScope.context.connection.id` returns the id of the current connection
@@ -91,6 +92,7 @@ For example:
 Note that for publication functions, similar functionality is not as readily available. One might consider (as in the provided example app) copying it as a property of `FiberScope.current` and using at later.
 
 Here is an example of a Meteor Method context (the `this` when a Meteor method is called):
+
 ```javascript
 {
     isSimulation: false,
@@ -114,7 +116,9 @@ Here is an example of a Meteor Method context (the `this` when a Meteor method i
     randomStream: null
 }
 ```
+
 But then again, maybe one need only care about this subset:
+
 ```javascript
 {
     userId: 'dwtnMSyxqxi32yGKC',
@@ -140,10 +144,13 @@ As noted above, `FiberScope.current` and `FiberScope.context` here do not work a
 The timers returned by `FiberScope.setTimeout` and `FiberScope.setInterval` can be cleared using `FiberScope.clearTimeout` and `FiberScope.clearInterval` (or `Meteor.clearTimeout` and `Meteor.clearInterval`).
 
 To **consciously** replace `Meteor.setTimeout`, `Meteor.setInterval` and `Meteor.defer` with their `FiberScope` counterparts. Simply call:
+
 ```javascript
 FiberScope._replaceMeteorTimerFunctions();
 ```
 Then you can carry on using `Meteor.setTimeout`, `Meteor.setInterval` and `Meteor.defer` in your code with the benefits of `FiberScope` in those async functions.
+
+Note that in those cases, a deep copy of `FiberScope.current` and a shallow copy of `FiberScope.context` are made at the point of calling the timer functions. To call versions where references are used instead, use `FiberScope.setTimeout_refType` (and `FiberScope.setInterval_refType` and `FiberScope.defer_refType` methods; also `FiberScope._replaceMeteorTimerFunctions_refType()`).
 
 #### Promises
 
